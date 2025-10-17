@@ -1,0 +1,327 @@
+\\MainActivity.java
+
+package com.example.menu4;
+
+import android.content.Intent;
+import android.os.Bundle;
+
+import com.google.android.material.snackbar.Snackbar;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.view.View;
+
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+
+import com.example.menu4.databinding.ActivityMainBinding;
+
+import android.view.Menu;
+import android.view.MenuItem;
+
+public class MainActivity extends AppCompatActivity {
+
+    private AppBarConfiguration appBarConfiguration;
+    private ActivityMainBinding binding;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        setSupportActionBar(binding.toolbar);
+
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+
+        binding.fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAnchorView(R.id.fab)
+                        .setAction("Action", null).show();
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        else if (id == R.id.palindrome4){
+            Intent intent=new Intent(MainActivity.this, palindrome.class);
+            startActivity(intent);
+        }
+        else if (id == R.id.armstrong4){
+            Intent intent=new Intent(MainActivity.this, armstrong.class);
+            startActivity(intent);
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        return NavigationUI.navigateUp(navController, appBarConfiguration)
+                || super.onSupportNavigateUp();
+    }
+}
+\\menu_main.xml
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.menu4.MainActivity">
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/palindrome4"
+        android:orderInCategory="101"
+        android:title="Palindrome" />
+    <item
+        android:id="@+id/armstrong4"
+        android:orderInCategory="102"
+        android:title="Armstrong" />
+</menu>
+\\activity_palindrome.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_centerVertical="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".palindrome">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="100dp"
+        android:text="Palindrome"
+        tools:layout_editor_absoluteX="151dp"
+        tools:layout_editor_absoluteY="70dp" />
+
+    <EditText
+        android:id="@+id/editTextText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="-80dp"
+        android:layout_marginTop="150dp"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="enter number"
+        tools:layout_editor_absoluteX="95dp"
+        tools:layout_editor_absoluteY="165dp" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="-190dp"
+        android:layout_marginTop="200dp"
+        android:text="Submit"
+        tools:layout_editor_absoluteX="147dp"
+        tools:layout_editor_absoluteY="271dp" />
+</androidx.appcompat.widget.LinearLayoutCompat>
+\\palindrome.java
+
+package com.example.menu4;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class palindrome extends AppCompatActivity {
+    TextView t1;
+    EditText e1;
+    Button b1;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_palindrome);
+        t1=findViewById(R.id.textView);
+        e1=findViewById(R.id.editTextText);
+        b1=findViewById(R.id.button);
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int n1 = Integer.parseInt(e1.getText().toString());
+                int m = n1;
+                int n = 0;
+
+                while (n1 != 0) {
+                    int r = n1 % 10;
+                    n = n * 10 + r;
+                    n1 = n1 / 10;
+                }
+                if (m == n) {
+                    Toast.makeText(palindrome.this, m+" is a palindrome", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(palindrome.this, m+"is not a palindrome", Toast.LENGTH_LONG).show();
+
+                }
+            }
+
+
+        });
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+    }
+}
+\\activity_armstrong.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_centerVertical="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".armstrong">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="100dp"
+        android:text="Armstrong"
+        tools:layout_editor_absoluteX="149dp"
+        tools:layout_editor_absoluteY="58dp" />
+
+    <EditText
+        android:id="@+id/editTextText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="-80dp"
+        android:layout_marginTop="150dp"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="enter number"
+        tools:layout_editor_absoluteX="99dp"
+        tools:layout_editor_absoluteY="129dp" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="-190dp"
+        android:layout_marginTop="200dp"
+        android:text="Submit"
+        tools:layout_editor_absoluteX="146dp"
+        tools:layout_editor_absoluteY="237dp" />
+</androidx.appcompat.widget.LinearLayoutCompat>
+\\armstrong.java
+
+package com.example.menu4;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class armstrong extends AppCompatActivity {
+    TextView t2;
+    EditText e2;
+    Button b2;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_armstrong);
+        t2=findViewById(R.id.textView2);
+        e2=findViewById(R.id.editTextText2);
+        b2=findViewById(R.id.button2);
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String inputStr = e2.getText().toString();
+                if (inputStr.isEmpty()) {
+                    t2.setText("enter a number");
+                    return;
+                }
+
+                int num = Integer.parseInt(inputStr);
+                int originalNum = num;
+                int digits = inputStr.length();
+                int sum = 0;
+
+                while (num > 0) {
+                    int digit = num % 10;
+                    // Calculate power manually because Math.pow returns double
+                    int power = 1;
+                    for (int i = 0; i < digits; i++) {
+                        power *= digit;
+                    }
+                    sum += power;
+                    num /= 10;
+                }
+
+                if (sum == originalNum) {
+                    Toast.makeText(armstrong.this, originalNum+"is an armstrong number", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(armstrong.this, originalNum+"is not an armstrong number", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+    }
+}
